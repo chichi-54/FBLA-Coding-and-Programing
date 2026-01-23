@@ -1,0 +1,70 @@
+{% extends 'main.html' %}
+{% block content %}
+
+
+<!-- Main Section -->
+<main class="businesses">
+    <section class="hero-section text-center">
+        <div class="container container--narrow">
+            <div class="hero-section__box">
+                <h2>Search for <span>small businesses</span> near you</h2>
+            </div>
+
+            <div class="hero-section__search">
+                <form id='searchForm' class="form" action="{% url 'businesses' %}" method="get">
+                    <div class="form__field">
+                        <label for="formInput#search">Search By businesses </label>
+                        <input class="input input--text" id="formInput#search" type="text" name="search_query"
+                            placeholder="Search by business Title" value="{{search_query}}" />
+                    </div>
+
+                    <input class="btn btn--sub btn--lg" type="submit" value="Search" />
+                </form>
+            </div>
+        </div>
+    </section>
+    <!-- Search Result: DevList -->
+    <section class="businessesList">
+        <div class="container">
+            <div class="grid grid--three">
+
+                {% for business in businesses %}
+                <div class="column">
+                    <div class="card business">
+                        <a href="{% url 'business' business.id %}" class="business">
+                            <img class="business__thumbnail" src="{{business.imageURL}}" alt="business thumbnail" />
+                            <div class="card__body">
+                                <h3 class="business__title">{{business.title}}</h3>
+                                <p><a class="business__author" href="{% url 'user-profile' business.owner.id %}">By
+                                        {{business.owner.name}}</a>
+                                </p>
+                                <p class="business--rating">
+                                    <span style="font-weight: bold;">{{business.vote_ratio}}%</span> Positive
+                                    Feedback ({{business.vote_total}}) Vote{{business.vote_total|pluralize:"s"}}
+                                </p>
+                                <div class="business__tags">
+                                    {% for tag in business.tags.all %}
+                                    <span class="tag tag--pill tag--main">
+                                        <small>{{tag}}</small>
+                                    </span>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </section>
+
+    {% include 'pagination.html' with queryset=businesses custom_range=custom_range %}
+
+</main>
+
+
+
+
+{% endblock %}
