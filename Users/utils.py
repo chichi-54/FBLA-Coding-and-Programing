@@ -40,14 +40,15 @@ def search_businesses(request):
 
     categories = Category.objects.filter(name__icontains=search_query)
 
-    businesses = Business.objects.distinct().filter(
+    businesses = Business.objects.filter(
         Q(name__icontains=search_query) |
         Q(description__icontains=search_query) |
-        Q(owner__name__icontains=search_query) |
+        Q(owner__first_name__icontains=search_query) |
+        Q(owner__last_name__icontains=search_query) |
+        Q(email__icontains=search_query) |
         Q(categories__in=categories) |
-        Q(address__city=search_query) |
-        Q(address__street_address=search_query) |
-        Q(categories__in=categories)
-
-    )
+        Q(address__city__icontains=search_query) |
+        Q(address__street_address__icontains=search_query) |
+        Q(address__zip_code__icontains=search_query)
+    ).distinct()
     return businesses, search_query

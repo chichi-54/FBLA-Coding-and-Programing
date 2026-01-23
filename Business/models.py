@@ -7,7 +7,7 @@ class Business(models.Model):
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
     status = models.ForeignKey("Status", on_delete=models.SET_NULL, null=True, blank=True)
     name = models.CharField(max_length=200)
-    category = models.ForeignKey("Category", on_delete=models.SET_NULL, null=True, blank=True)
+    categories = models.ManyToManyField("Category", blank=True)
     description = models.TextField(null=True, blank=True)
     address = models.ForeignKey("Address", on_delete=models.CASCADE)
     phone_number = models.IntegerField(blank=True, null=True)
