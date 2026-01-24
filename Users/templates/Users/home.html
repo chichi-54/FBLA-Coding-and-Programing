@@ -27,25 +27,25 @@
     <section class="businessesList">
         <div class="container">
             <div class="grid grid--three">
-
                 {% for business in businesses %}
                 <div class="column">
                     <div class="card business">
-                        <a href="{% url 'business' business.id %}" class="business">
+                        <a href="{% url 'single-business' business.id %}" class="business">
                             <img class="business__thumbnail" src="{{business.imageURL}}" alt="business thumbnail" />
                             <div class="card__body">
-                                <h3 class="business__title">{{business.title}}</h3>
-                                <p><a class="business__author" href="{% url 'user-profile' business.owner.id %}">By
-                                        {{business.owner.name}}</a>
+                                <h3 class="business__title">{{business.name}}</h3>
+                                <p><a class="business__author" href="{% url 'account' business.owner.id %}">By
+                                        {{business.owner.first_name}} {{business.owner.last_name}}</a>
                                 </p>
                                 <p class="business--rating">
                                     <span style="font-weight: bold;">{{business.vote_ratio}}%</span> Positive
                                     Feedback ({{business.vote_total}}) Vote{{business.vote_total|pluralize:"s"}}
                                 </p>
-                                <div class="business__tags">
-                                    {% for tag in business.tags.all %}
+                                <div class="business__categories">
+                                    <br><p style="margin-bottom:5px">Category</p>
+                                    {% for category in business.categories.all %}
                                     <span class="tag tag--pill tag--main">
-                                        <small>{{tag}}</small>
+                                        <small>{{category}}</small>
                                     </span>
                                     {% endfor %}
 

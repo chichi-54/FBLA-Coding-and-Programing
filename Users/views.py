@@ -14,9 +14,13 @@ def home(request):
     context = {'businesses':businesses, 'search_query':search_query, 'custom_range':custom_range}
     return render(request, "users/home.html", context)
 
+@login_required(login_url="login")
+def single_business(request, pk):
+    context = {}
+    return render(request, "users/single_business.html", context)
 
 @login_required(login_url="login")
-def account(request):
+def account(request, pk):
     context = {}
     return render(request, "users/account.html", context)
 

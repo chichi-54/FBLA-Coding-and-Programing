@@ -1,5 +1,5 @@
 :root {
-  --color-sub: #2d2d39;
+  --color-sub: #00862d;
 }
 
 .btn--sub {
@@ -41,6 +41,10 @@ img {
   align-items: center;
 }
 
+/* .card {
+  max-width: 30px;
+} */
+
 .header__logo > img {
   height: 3.8rem;
 }
@@ -70,8 +74,8 @@ img {
   pointer-events: all;
 }
 
-.project--thumbnail {
-  height: 250px;
+.business--thumbnail {
+  height: 100px;
   object-fit: cover;
 }
 
@@ -333,7 +337,7 @@ img {
 }
 
 .dev__name {
-  color: var(--color-sub);
+  color: var(--color-sub-light);
   font-size: 2.8rem;
   font-weight: 700;
   margin-top: 1rem;
@@ -365,7 +369,7 @@ img {
 .devInfo__title,
 .devInfo__subtitle {
   font-size: 2.6rem;
-  color: var(--color-sub);
+  color: var(--color-sub-light);
   text-transform: uppercase;
   font-weight: 700;
   margin-bottom: 1.5rem;
@@ -385,13 +389,13 @@ img {
 
 .devSkill {
   margin-bottom: 3rem;
-}
+};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .devSkill__title {
-  font-size: 1.65rem;
+  font-size: 1.65rem;;;;;;;;;;;;;;;;;;;;;;;;;;
   font-weight: 500;
   color: var(--color-sub-light);
-}
+};;;;;;;;;;;;
 
 @media screen and (min-width: 700px) {
   .devSkill {
@@ -460,7 +464,7 @@ img {
 .singleProject__title {
   font-size: 3.6rem;
   font-weight: 700;
-  color: var(--color-sub);
+  color: var(--color-sub-light);
   margin-bottom: 3rem;
 }
 
@@ -491,37 +495,39 @@ img {
 }
 
 .projects .hero-section__box {
-  margin-bottom: 2.5rem;
+  margin-bottom: 5.5rem;
 }
 
 .projects .hero-section__box > h2 {
-  color: var(--color-sub);
+  color: var(--color-sub-light);
 }
 
 .projects .hero-section__box > h2 > span {
   font-weight: 700;
-  color: var(--color-sub);
+  color: var(--color-sub-light);
 }
 
-.projectsList {
+.businessesList {
   margin-top: 8rem;
 }
 
 /*========== Projects ==========*/
 
-.project__thumbnail {
-  height: 25rem;
+.business__thumbnail {
+  width: auto;
+  height: 300px;
   object-fit: cover;
-  object-position: top center;
+  display: block;
 }
 
-.project__title {
+
+.business__title {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--color-sub);
+  color: var(--color-sub-light);
 }
 
-.project__info {
+.business__info {
   margin: 1rem 0;
   font-size: 1.4rem;
   text-align: justify;

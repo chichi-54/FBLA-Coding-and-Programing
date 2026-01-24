@@ -1,61 +1,54 @@
+/*=======================
+  Grid Layout
+========================*/
+
 .grid {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: stretch;
+  gap: 2.5%; /* consistent spacing between columns */
 }
 
 .grid > .column {
-  min-width: 28rem;
   margin-bottom: 2.5rem;
+  flex-basis: 100%; /* default for mobile */
+  max-width: 100%;
 }
 
-.grid--three > .column {
-  flex-basis: 100%;
-}
-
-@media screen and (min-width: 800px) {
-  .grid--three {
-    margin-right: -2%;
-  }
-
+/*=======================
+  Mobile: 1 column (<=450px)
+========================*/
+@media screen and (max-width: 450px) {
+  .grid--two > .column,
   .grid--three > .column {
-    margin-right: 2%;
+    flex-basis: 100%;
+    max-width: 100%;
   }
+}
 
+/*=======================
+  Tablet: 2 columns (451px–1199px)
+========================*/
+@media screen and (min-width: 451px) and (max-width: 1199px) {
+  .grid--two > .column,
   .grid--three > .column {
     flex-basis: 48%;
+    max-width: 48%;
   }
 }
 
+/*=======================
+  Desktop: 3 columns (>=1200px)
+========================*/
 @media screen and (min-width: 1200px) {
-  .grid--three {
-    margin-right: -2.33%;
-  }
-
-  .grid--three > .column {
-    margin-right: 2.33%;
-  }
-
   .grid--three > .column {
     flex-basis: 31%;
-  }
-}
-
-.grid--two > .column {
-  flex-basis: 100%;
-}
-
-@media screen and (min-width: 800px) {
-  .grid--two {
-    margin-right: -2%;
-  }
-
-  .grid--two > .column {
-    margin-right: 2%;
+    max-width: 31%;
   }
 
   .grid--two > .column {
     flex-basis: 48%;
+    max-width: 48%;
   }
 }
