@@ -67,6 +67,14 @@ class Address(models.Model):
 
     def __str__(self):
         return self.street_address + " " + self.city + " " + self.state + " " + self.country + " " + self.zip_code
+    
+    @property
+    def full_address(self):
+        parts = [self.street_address]
+        if self.street_address_2:
+            parts.append(self.street_address_2)
+        parts.extend([self.city, self.state, self.country, self.zip_code])
+        return " ".join(parts)
 
 
 class Review(models.Model):

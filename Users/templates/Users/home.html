@@ -34,7 +34,7 @@
                             <img class="business__thumbnail" src="{{business.imageURL}}" alt="business thumbnail" />
                             <div class="card__body">
                                 <h3 class="business__title">{{business.name}}</h3>
-                                <p><a class="business__author" href="{% url 'account' business.owner.id %}">By
+                                <p><a class="business__author" href="{% url 'user-profile' business.owner.id %}">By
                                         {{business.owner.first_name}} {{business.owner.last_name}}</a>
                                 </p>
                                 <p class="business--rating">

@@ -4,50 +4,21 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .utils import search_businesses, paginate_businesses
+from Business.models import Business
 # Create your views here.
 
-@login_required(login_url="login")
-def home(request):
-    businesses , search_query = search_businesses(request)
-    custom_range, businesses = paginate_businesses(request, businesses, 6)
-    context = {'businesses':businesses, 'search_query':search_query, 'custom_range':custom_range}
-    return render(request, "users/home.html", context)
 
 @login_required(login_url="login")
-def single_business(request, pk):
-    context = {}
-    return render(request, "users/single_business.html", context)
-
-@login_required(login_url="login")
-def account(request, pk):
+def account(request):
     context = {}
     return render(request, "users/account.html", context)
 
 
 @login_required(login_url="login")
-def create_business(request):
-    context = {}
-    return render(request, "users/business_form.html", context)
-
-
-@login_required(login_url="login")
-def update_business(request, pk):
-    context = {}
-    return render(request, "users/business_form.html", context)
-
-
-@login_required(login_url="login")
-def delete_business(request, pk):
-    context = {}
-    return render(request, "users/business_form.html", context)
-
-
-@login_required(login_url="login")
-def inbox(request):
-    context = {}
-    return render(request, "users/inbox.html", context)
-
+def user_profile(request, pk):
+    profile = Profile.objects.get(id=pk)
+    context = {'profile':profile}
+    return render(request, "users/account.html", context)
 
 def login_user(request):
     page = 'login'
