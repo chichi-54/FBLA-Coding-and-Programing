@@ -48,6 +48,7 @@
               <a href="{% url 'single-business' business.id %}">{{business.name}}</a>
               <p>{{business.description|slice:"150"}}</p>
             </td>
+            {% if user.id == profile.user.id%}
             <td class="settings__tableActions">
               <a class="tag tag--pill tag--main settings__btn" href="{% url 'update-business' business.id %}"><i
                   class="im im-edit"></i> Edit</a>
@@ -55,6 +56,13 @@
                 href="{% url 'delete-business'  business.id %}?next=/account"><i class="im im-x-mark-circle-o"></i>
                 Delete</a>
             </td>
+            {% else %}
+            <td class="settings__tableActions">
+                <a class="tag tag--pill tag--main settings__btn"
+                    href="{% url 'single-business'  business.id %}?next=/account"><i class="im im-x-mark-circle-o"></i>
+                    View</a>
+                </td>
+                {% endif %}
           </tr>
           {% endfor %}
 
