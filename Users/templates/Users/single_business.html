@@ -1,5 +1,5 @@
 {% extends 'main.html' %}
-
+{% load static %}
 {% block content %}
 
 <!-- Main Section -->
@@ -9,10 +9,13 @@
 
             <div class="column column--2of3">
                 <img class="singleBusiness__preview" src="{{ business.imageURL }}" alt="portfolio thumbnail" />
-                <a href="{% url 'user-profile' business.owner.id %}"
-                    class="singleBusiness__developer">Owner: {{business.owner.first_name}}</a>
-                <h2 class="singleBusiness__title">{{business.title}}</h2>
-                <h3 class="singleBusiness__subtitle">About the Business</h3>
+                <h2 class="singleBusiness__title">{{business.name}}</h2> 
+                {% comment %} <h3 class="singleBusiness__subtitle">About the Business</h3> {% endcomment %}
+                {% for category in business.categories.all %} 
+                <span style="font-weight:bold; color:var(--color-sub)">
+                    {{category.name}}
+                </span>
+                {% endfor %}
                 <div class="singleBusiness__info">
                     {{business.description}}
                 </div>
@@ -46,7 +49,7 @@
 
                     <div class="commentList">
                         {% for review in business.review_set.all %}
-                        {% if review.body %}
+                        {% if review.review_message %}
                         <div class="comment">
                             <a href="{% url 'user-profile' review.owner.id  %}">
                                 <img class="avatar avatar--md" src="{{review.owner.profile_image.url}}" alt="user" />
@@ -54,43 +57,64 @@
 
 
                             <div class="comment__details">
+                                <div>
                                 <a href="{% url 'user-profile' review.owner.id  %}"
-                                    class="comment__author">{{review.owner.name}}</a>
-                                <p class="comment__info">{{review.body|linebreaksbr}}</p>
+                                    class="comment__author">{{review.owner.first_name}} {{review.owner.last_name}}</a>
+                                    {% if review.review_rating == "up" %}
+                                        <span><img style="margin-left:5px; height:12px; width:auto;" src="{% static 'images/heart.png' %}"</span>
+                                    {% else %}
+                                        <span><img style="margin-left:5px; height:15px; width:auto;"  src="{% static 'images/delete.png' %}"</span>
+                                    {% endif %}
+                                </div
+                                <p class="comment__info">{{review.review_message|linebreaksbr}}</p>
                             </div>
 
                         </div>
                         {% endif %}
                         {% endfor %}
-
+ 
                     </div>
                 </div>
             </div>
 
             <div class="column column--1of3">
-                <h3 class="singleBusiness__subtitle">Direction</h3>
+                <h4>Business Owner</h4>
+                <a href="{% url 'user-profile' business.owner.id %}"
+                class="singleBusiness__developer">Owner: {{business.owner.first_name}}
+                </a>
+                <br><br>
+                <h4>Contact Us</h4>
+                {% if business.phone_number %}
+                    <p>Call now: <a href="tel:+{{business.phone_number}}">{{business.phone_number}}</a></p>
+                {% endif %}
+                    
+                {% if business.website %}
+                <p>Visi website: <a class="singleBusiness__liveLink" href="{{business.website}}" target="_blank"><i
+                        class="im im-external-link"></i>Visit Website
+                </a></p>        
+                {% endif %}
+                {% if business.email %}
+                <p>Send email: <a class="singleBusiness__liveLink" href="{{business.email}}" target="_blank"><i
+                        class="im im-external-link"></i>{{business.email}}
+                </a></p>
+                {% endif %}
+                <br>
+                {% if business.address %}
+                <h4 class="singleBusiness__subtitle">Direction</h4>
                 <div class="singleBusiness__toolStack">
 
                     <!-- Show full address -->
-                    {% if business.address %}
                         <p class="business__address">
                             {{ business.address.street_address }}
                             {% if business.address.street_address_2 %}, {{ business.address.street_address_2 }}{% endif %},
-                            {{ business.address.city }}, {{ business.owner.address.state }},
-                            {{ business.address.country }}, {{ business.owner.address.zip_code }}
+                            {{ business.address.city }}, {{ business.address.state }},
+                            {{ business.address.country }}, {{ business.address.zip_code }}
                         </p>
-
                         <!-- Google Maps Embed -->
-                        <iframe
-                        width="100%"
-                        height="350"
-                        style="border:0"
-                        loading="lazy"
-                        allowfullscreen
-                        referrerpolicy="no-referrer-when-downgrade"
-                        src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAmiIETNGqkRACYfPT7L-GzLoB-PemvbKY
-                            &q={{ business.address.full_address|urlencode }}">
-                    </iframe>
+                        <iframe width="100%" height="350" style="border:0" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"
+                            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAmiIETNGqkRACYfPT7L-GzLoB-PemvbKY
+                                &q={{ business.address.full_address|urlencode }}">
+                        </iframe>
                         <!-- Google Maps link -->
                         <a href="https://www.google.com/maps/dir/?api=1&destination={{ business.address.full_address|urlencode }}" target="_blank">
                             Get Directions
@@ -98,30 +122,21 @@
                     {% else %}
                         <p class="business__address">Address not available</p>
                     {% endif %}
+                    <br>
                 
-                    <!-- Tags -->
-                    {% for tag in business.tags.all %}
-                        <span class="tag tag--pill tag--sub tag--lg">
-                            <small>{{ tag }}</small>
-                        </span>
-                    {% endfor %}
-                
+                    <!-- Gallery -->
+                    <h4>Business Gallery</h4>
+                    <br>
+                    <div class="business__gallery">
+                        {% for image in business.images.all %}
+                            <img src="{{ image.image.url }}" alt="{{ business.name }} image">
+                        {% empty %}
+                            <p>No additional images</p>
+                        {% endfor %}
+                    </div>
+                    
                 </div>
-                
-
-                {% if business.source_link %}
-                <a class="singleBusiness__liveLink" href="{{business.source_link}}" target="_blank"><i
-                        class="im im-external-link"></i>Source
-                    Code
-                </a>
-                {% endif %}
-
-                {% if business.demo_link %}
-                <a class="singleBusiness__liveLink" href="{{business.source_link}}" target="_blank"><i
-                        class="im im-external-link"></i>Live Demo
-
-                </a>
-                {% endif %}
+             
 
             </div>
         </div>

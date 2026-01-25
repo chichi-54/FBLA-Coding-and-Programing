@@ -54,6 +54,20 @@ class Business(models.Model):
         self.vote_total = totalVotes
         self.vote_ratio = ratio
 
+        self.save()
+
+
+class BusinessImage(models.Model):
+    business = models.ForeignKey(
+        Business,
+        on_delete=models.CASCADE,
+        related_name="images"
+    )
+    image = models.ImageField(upload_to="business_images/")
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Image for {self.business.name}"
 
 
 class Address(models.Model):
@@ -79,18 +93,18 @@ class Address(models.Model):
 
 class Review(models.Model):
     OPTIONS = [
-        ("Excellent", 5),
-        ("Very Good", 4),
-        ("Moderate", 3),
-        ("Not Satisfied", 2),
-        ("Awful", 1)
+        ('up', 'Up Vote'),
+        ('down', 'Down Vote'),
     ]
-    user = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True)
-    business = models.ForeignKey("Business", on_delete=models.CASCADE)
+    owner = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True)
+    business = models.ForeignKey("Business", on_delete=models.SET_NULL, null=True, blank=True)
     review_message = models.TextField(blank=True)
     review_rating = models.CharField(max_length=20, choices=OPTIONS, null=True, blank=True)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
     created = models.DateTimeField(auto_now_add=True)
+
+    # class Meta:
+    #     unique_together = [['owner', 'business']]
 
     def __str__(self):
         return self.review_rating
