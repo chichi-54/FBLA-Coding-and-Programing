@@ -28,33 +28,34 @@
         <div class="container">
             <div class="grid grid--three">
                 {% for business in businesses %}
-                <div class="column">
-                    <div class="card business">
-                        <a href="{% url 'single-business' business.id %}" class="business">
-                            <img class="business__thumbnail" src="{{business.imageURL}}" alt="business thumbnail" />
-                            <div class="card__body">
-                                <h3 class="business__title">{{business.name}}</h3>
-                                <p><a class="business__author" href="{% url 'user-profile' business.owner.id %}">By
-                                        {{business.owner.first_name}} {{business.owner.last_name}}</a>
-                                </p>
-                                <p class="business--rating">
-                                    <span style="font-weight: bold;">{{business.vote_ratio}}%</span> Satisfactory  ({{business.vote_total}}) Vote{{business.vote_total|pluralize:"s"}}
-                                </p>
-                                <div class="business__categories">
-                                    <br><p style="margin-bottom:5px">Category</p>
-                                    {% for category in business.categories.all %}
-                                    <span class="tag tag--pill tag--main">
-                                        <small>{{category}}</small>
-                                    </span>
-                                    {% endfor %}
+                    {% if business.approval_state == "Approved" %}
+                    <div class="column">
+                        <div class="card business">
+                            <a href="{% url 'single-business' business.id %}" class="business">
+                                <img class="business__thumbnail" src="{{business.imageURL}}" alt="business thumbnail" />
+                                <div class="card__body">
+                                    <h3 class="business__title">{{business.name}}</h3>
+                                    <p><a class="business__author" href="{% url 'user-profile' business.owner.id %}">By
+                                            {{business.owner.first_name}} {{business.owner.last_name}}</a>
+                                    </p>
+                                    <p class="business--rating">
+                                        <span style="font-weight: bold;">{{business.vote_ratio}}%</span> Satisfactory  ({{business.vote_total}}) Vote{{business.vote_total|pluralize:"s"}}
+                                    </p>
+                                    <div class="business__categories">
+                                        <br><p style="margin-bottom:5px">Category</p>
+                                        {% for category in business.categories.all %}
+                                        <span class="tag tag--pill tag--main">
+                                            <small>{{category}}</small>
+                                        </span>
+                                        {% endfor %}
 
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
-                </div>
+                    {% endif %}
                 {% endfor %}
-
             </div>
         </div>
     </section>

@@ -25,7 +25,7 @@ def single_business(request, pk):
     form = ReviewForm()
 
     # Check if user can leave a review (4-hour rule)
-    four_hours_ago = timezone.now() - timedelta(seconds=5)
+    four_hours_ago = timezone.now() - timedelta(hours=5)
     can_review = not business.review_set.filter(owner=user, created__gte=four_hours_ago).exists()
 
     if request.method == 'POST' and can_review:
