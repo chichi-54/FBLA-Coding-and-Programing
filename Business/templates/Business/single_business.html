@@ -129,10 +129,17 @@
                     <br>
                     <div class="business__gallery">
                         {% for image in business.images.all %}
-                            <img src="{{ image.image.url }}" alt="{{ business.name }} image">
+                            <div class="gallery-item">
+                                <img src="{{ image.image.url }}" alt="{{ business.name }} image">
+                            </div>
                         {% empty %}
                             <p>No additional images</p>
                         {% endfor %}
+                    </div>
+                    
+                    <!-- Hover preview container -->
+                    <div id="hover-preview">
+                        <img id="hover-img" src="" alt="Preview">
                     </div>
                     
                 </div>

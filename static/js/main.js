@@ -3,6 +3,140 @@
 let searchForm = document.getElementById('searchForm')
 let pageLinks = document.getElementsByClassName('page-link')
 
+// hover
+document.addEventListener("DOMContentLoaded", function() {
+    const hoverPreview = document.getElementById("hover-preview")
+    const hoverImg = document.getElementById("hover-img")
+    const gallery = document.querySelector(".business__gallery")
+
+    document.querySelectorAll(".gallery-item img").forEach(img => {
+        img.addEventListener("mouseenter", (e) => {
+            hoverImg.src = img.src
+            hoverPreview.style.display = "block"
+
+            // Position vertically aligned with thumbnail
+            const rect = img.getBoundingClientRect()
+            const galleryRect = gallery.getBoundingClientRect()
+            hoverPreview.style.top = (rect.top - galleryRect.top) + "px"
+        })
+
+        img.addEventListener("mouseleave", () => {
+            hoverPreview.style.display = "none"
+        })
+    })
+})
+
+// delete 
+document.addEventListener("DOMContentLoaded", function() {
+
+    // --- Delete existing images ---
+    document.querySelectorAll(".delete-image-btn").forEach(btn => {
+        btn.addEventListener("click", function() {
+            const imgDiv = btn.parentElement
+            const imgId = btn.dataset.id
+
+            // Mark for deletion: append a hidden input
+            const input = document.createElement("input")
+            input.type = "hidden"
+            input.name = "delete_images"
+            input.value = imgId
+            document.querySelector("form").appendChild(input)
+
+            // Remove image preview from DOM
+            imgDiv.remove()
+        })
+    })
+
+    // --- Add new image dynamically ---
+    const container = document.getElementById("new-images-container")
+    const addBtn = document.getElementById("add-new-image")
+
+    addBtn.addEventListener("click", () => {
+        const input = document.createElement("input")
+        input.type = "file"
+        input.name = "new_images"
+        input.className = "new-image-input"
+        container.appendChild(input)
+    })
+
+    // --- Category Pills (same as before) ---
+    const selected = new Set()
+    const hiddenInput = document.getElementById('selectedCategories')
+    const otherField = document.getElementById('otherCategoryField')
+
+    document.querySelectorAll('.business-tag').forEach(tag => {
+        const id = tag.dataset.id
+        if (tag.classList.contains('selected')) selected.add(id)
+
+        tag.addEventListener('click', () => {
+            if (selected.has(id)) {
+                selected.delete(id)
+                tag.classList.remove('selected')
+            } else {
+                selected.add(id)
+                tag.classList.add('selected')
+            }
+
+            otherField.style.display = selected.has('other') ? 'block' : 'none'
+            hiddenInput.value = [...selected].filter(i => i !== 'other').join(',')
+        })
+    })
+    hiddenInput.value = [...selected].filter(i => i !== 'other').join(',')
+})
+
+// categories
+document.addEventListener("DOMContentLoaded", function() {
+    const selected = new Set()
+    const hiddenInput = document.getElementById('selectedCategories')
+    const otherField = document.getElementById('otherCategoryField')
+    const categoryPills = document.querySelectorAll('.business-tag')
+
+    // --- Pre-select categories from backend ---
+    // 'preSelected' should be a list of IDs passed via template
+    if (typeof preSelected !== "undefined" && Array.isArray(preSelected)) {
+        preSelected.forEach(id => selected.add(String(id)))
+    }
+
+    // If Other categories exist, select Other pill
+    if (typeof hasCustomCategories !== "undefined" && hasCustomCategories) {
+        selected.add('other')
+    }
+
+    // Apply 'selected' class to DOM pills
+    categoryPills.forEach(tag => {
+        const id = tag.dataset.id
+        if (selected.has(id)) {
+            tag.classList.add('selected')
+        }
+
+        // Toggle selection on click
+        tag.addEventListener('click', () => {
+            if (selected.has(id)) {
+                selected.delete(id)
+                tag.classList.remove('selected')
+            } else {
+                selected.add(id)
+                tag.classList.add('selected')
+            }
+
+            // Show / hide Other textarea
+            if (selected.has('other')) {
+                otherField.style.display = 'block'
+            } else {
+                otherField.style.display = 'none'
+            }
+
+            // Only real category IDs go to Django
+            const realIds = [...selected].filter(i => i !== 'other')
+            hiddenInput.value = realIds.join(',')
+        })
+    })
+
+    // Initialize hidden input on page load
+    hiddenInput.value = [...selected].filter(i => i !== 'other').join(',')
+})
+
+
 //ENSURE SEARCH FORM EXISTS
 if (searchForm) {
     for (let i = 0; pageLinks.length > i; i++) {

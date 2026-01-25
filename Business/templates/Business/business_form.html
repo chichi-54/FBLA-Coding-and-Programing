@@ -1,0 +1,83 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+
+
+
+<!-- Main Section -->
+<main class="formPage my-xl">
+    <div class="content-box">
+        <div class="formWrapper">
+            <a class="backButton" href="{% url 'account' %}"><span style="font-weight:bold; font-size:25px; color:#00862d" %}>&#10540;</span></a>
+            <br>
+
+            <form class="form" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {% for field in form %}
+                <!-- Input:Text -->
+                <div class="form__field">
+                    <label for="formInput#text">{{field.label}}</label>
+                    {{field}}
+                </div>
+                {% endfor %}
+
+                <div class="form__field">
+                    <label>Categories</label>
+                    <div class="category-list">
+                        {% for category in categories %}
+                            <div class="business-tag tag tag--pill tag--main {% if category.id in selected_category_ids %}selected{% endif %}"
+                                 data-id="{{ category.id }}">
+                                {{ category.name }}
+                            </div>
+                        {% endfor %}
+                
+                        <!-- Other pill -->
+                        <div class="business-tag tag tag--pill tag--main {% if custom_categories %}selected{% endif %}"
+                             data-id="other">
+                            Other
+                        </div>
+                    </div>
+                
+                    <!-- Hidden input for Django -->
+                    <input type="hidden" name="categories" id="selectedCategories">
+                </div>
+                
+                
+                <div class="form__field" id="otherCategoryField" style="display: {% if custom_categories %}block{% else %}none{% endif %};">
+                    <label>Other categories</label>
+                    <textarea class="input" name="newcategories" placeholder="Add categories here...">
+                        {% for cat in custom_categories %}{{ cat.name }} {% endfor %}
+                    </textarea>
+                </div>
+                
+                <div class="form__field">
+                    <label>Business Gallery</label>
+                    <div class="existing-images" style=" display:flex; ">
+                        {% for img in business.images.all %}
+                            <div class="image-form" data-id="{{ img.id }}">
+                                <img src="{{ img.image.url }}" width="200px" height="auto" style="width:200px; height:auto; object-fit: cover; border-radius:10px;">
+                                <button type="button" class="delete-image-btn" data-id="{{ img.id }}">Delete</button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <!-- New Images -->
+                <div class="form__field">
+                    <label>Add New Images</label>
+                    <div id="new-images-container">
+                        <input type="file" name="new_images" class="new-image-input">
+                    </div>
+                    <button type="button" id="add-new-image">Add New Image</button>
+                </div>
+                
+                
+                <input class="btn btn--sub btn--lg  my-md" type="submit" value="Submit" />
+            </form>
+        </div>
+    </div>
+</main>
+
+
+{% endblock %}
