@@ -4,34 +4,42 @@ let searchForm = document.getElementById('searchForm')
 let pageLinks = document.getElementsByClassName('page-link')
 // clear review
 
-document.getElementById('reviewForm').addEventListener('submit', function() {
-    setTimeout(() => {
-        this.reset(); // clears the textarea and select
-    }, 100); // small delay to ensure Django handles POST
-});
+const reviewForm = document.getElementById('reviewForm')
+
+if (reviewForm) {
+    reviewForm.addEventListener('submit', function () {
+        setTimeout(() => {
+            this.reset()
+        }, 100)
+    })
+}
+
 
 // hover
-document.addEventListener("DOMContentLoaded", function() {
-    const hoverPreview = document.getElementById("hover-preview")
-    const hoverImg = document.getElementById("hover-img")
+document.addEventListener("DOMContentLoaded", () => {
+    const preview = document.getElementById("hover-preview")
+    const previewImg = document.getElementById("hover-img")
     const gallery = document.querySelector(".business__gallery")
 
-    document.querySelectorAll(".gallery-item img").forEach(img => {
-        img.addEventListener("mouseenter", (e) => {
-            hoverImg.src = img.src
-            hoverPreview.style.display = "block"
+    if (!preview || !previewImg || !gallery) return
 
-            // Position vertically aligned with thumbnail
-            const rect = img.getBoundingClientRect()
+    document.querySelectorAll(".gallery-item img").forEach(img => {
+        img.addEventListener("mouseenter", () => {
+            previewImg.src = img.src
+            preview.style.display = "block"
+
+            const imgRect = img.getBoundingClientRect()
             const galleryRect = gallery.getBoundingClientRect()
-            hoverPreview.style.top = (rect.top - galleryRect.top) + "px"
+
+            preview.style.top = (imgRect.top - galleryRect.top) + "px"
         })
 
         img.addEventListener("mouseleave", () => {
-            hoverPreview.style.display = "none"
+            preview.style.display = "none"
         })
     })
 })
+
 
 // delete 
 document.addEventListener("DOMContentLoaded", function() {

@@ -25,7 +25,7 @@ def single_business(request, pk):
     form = ReviewForm()
 
     # Check if user can leave a review (4-hour rule)
-    four_hours_ago = timezone.now() - timedelta(seconds=0)
+    four_hours_ago = timezone.now() - timedelta(hours=5)
     can_review = not business.review_set.filter(owner=user, created__gte=four_hours_ago).exists()
 
     if request.method == 'POST' and can_review:
@@ -39,15 +39,9 @@ def single_business(request, pk):
             # Update votes immediately after saving
             business.getVoteCount
 
-            # Redirect to avoid double submit / refresh resubmitting
             return redirect('single-business', pk=business.id)
 
-    context = {
-        'business': business,
-        'can_review': can_review,
-        'reviews': business.review_set.all().order_by('-created'),
-        'form': form
-    }
+    context = {'business': business,'can_review': can_review, 'reviews': business.review_set.all().order_by('-created'),'form': form}
     return render(request, 'business/single_business.html', context)
 
 
