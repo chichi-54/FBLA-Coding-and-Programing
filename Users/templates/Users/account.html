@@ -9,8 +9,10 @@
       <div class="column column--1of3">
         <div class="card text-center">
           <div class="card__body dev">
-            <a class="tag tag--pill tag--main settings__btn" href="{% url 'edit-account' %}"><i class="im im-edit"></i>
-              Edit</a>
+            {% if user.id == profile.user.id%}
+                <a class="tag tag--pill tag--main settings__btn" href="{% url 'edit-account' %}"><i class="im im-edit"></i>
+                Edit</a>
+              {% endif %}
             <img class="avatar avatar--xl dev__avatar" src="{{profile.imageURL}}" />
             <h2 class="dev__name">{{profile.first_name}} {{profile.last_name}}</h2>
             <p class="dev__location">Username {{profile.username}}</p>
@@ -43,7 +45,7 @@
               <a href="{% url 'single-business' business.id %}"><img src="{{business.imageURL}}" alt="business Thumbnail" /></a>
             </td>
             <td class="settings__tableInfo">
-              <a href="{% url 'single-business' business.id %}">{{business.title}}</a>
+              <a href="{% url 'single-business' business.id %}">{{business.name}}</a>
               <p>{{business.description|slice:"150"}}</p>
             </td>
             <td class="settings__tableActions">

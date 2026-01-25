@@ -2,6 +2,13 @@
 //GET SEARCH FORM AND PAGE LINKS
 let searchForm = document.getElementById('searchForm')
 let pageLinks = document.getElementsByClassName('page-link')
+// clear review
+
+document.getElementById('reviewForm').addEventListener('submit', function() {
+    setTimeout(() => {
+        this.reset(); // clears the textarea and select
+    }, 100); // small delay to ensure Django handles POST
+});
 
 // hover
 document.addEventListener("DOMContentLoaded", function() {

@@ -4,8 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
 from .utils import search_businesses, paginate_businesses
-from .forms import BusinessForm, BusinessImageFormSet
+from .forms import BusinessForm, BusinessImageFormSet, ReviewForm
 from .models import Business
+from django.utils import timezone
+from datetime import timedelta
 
 @login_required(login_url="login")
 def home(request):
@@ -15,11 +17,38 @@ def home(request):
     return render(request, "business/home.html", context)
 
 
+
 @login_required(login_url="login")
 def single_business(request, pk):
-    businessObj = Business.objects.get(id=pk)
-    context = {'business':businessObj}
-    return render(request, "business/single_business.html", context)
+    business = Business.objects.get(id=pk)
+    user = request.user.profile
+    form = ReviewForm()
+
+    # Check if user can leave a review (4-hour rule)
+    four_hours_ago = timezone.now() - timedelta(seconds=0)
+    can_review = not business.review_set.filter(owner=user, created__gte=four_hours_ago).exists()
+
+    if request.method == 'POST' and can_review:
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.owner = user
+            review.business = business
+            review.save()
+
+            # Update votes immediately after saving
+            business.getVoteCount
+
+            # Redirect to avoid double submit / refresh resubmitting
+            return redirect('single-business', pk=business.id)
+
+    context = {
+        'business': business,
+        'can_review': can_review,
+        'reviews': business.review_set.all().order_by('-created'),
+        'form': form
+    }
+    return render(request, 'business/single_business.html', context)
 
 
 @login_required(login_url="login")

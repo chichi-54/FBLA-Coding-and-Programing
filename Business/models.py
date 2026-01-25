@@ -3,6 +3,10 @@ import uuid
 from Users.models import Profile
 # Create your models here.
 
+import uuid
+from django.db import models
+
+
 class Business(models.Model):
     OPTIONS = (
         ("Approved", "Approved"),
@@ -43,16 +47,23 @@ class Business(models.Model):
     def reviewers(self):
         queryset = self.review_set.all().values_list('owner__id', flat=True)
         return queryset
-
     @property
     def getVoteCount(self):
         reviews = self.review_set.all()
-        upVotes = reviews.filter(value='up').count()
+        upVotes = reviews.filter(review_rating='up').count()
+        downVotes = reviews.filter(review_rating='down').count()
         totalVotes = reviews.count()
 
-        ratio = (upVotes / totalVotes) * 100
-        self.vote_total = totalVotes
-        self.vote_ratio = ratio
+        if totalVotes == 0:
+            # No votes yet: assume 0% positive
+            ratio = 0
+            self.vote_total = 0
+            self.vote_ratio = ratio
+        else:
+            # Percentage of positive votes
+            ratio = int((upVotes / totalVotes) * 100)  # always 0-100%
+            self.vote_total = totalVotes
+            self.vote_ratio = ratio
 
         self.save()
 
@@ -107,7 +118,7 @@ class Review(models.Model):
     #     unique_together = [['owner', 'business']]
 
     def __str__(self):
-        return self.review_rating
+        return self.review_message
     
 
 class Category(models.Model):

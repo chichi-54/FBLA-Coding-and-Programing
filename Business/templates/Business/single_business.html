@@ -21,59 +21,81 @@
                 </div>
                 <div class="comments">
                     <h3 class="singleBusiness__subtitle">Feedback</h3>
-                    <h5 class="Business--rating">
-                        {{business.vote_ratio}}% Positive Feedback ({{business.vote_total}}
-                        Vote{{business.vote_total|pluralize:"s"}})
-                    </h5>
+                    {% if reviews %}
+                        <h5 class="Business--rating">
+                            {{business.vote_ratio}}% Positive Feedback ({{business.vote_total}}
+                            Vote{{business.vote_total|pluralize:"s"}})
+                        </h5>
 
-                    {% if request.user.profile.id in business.reviewers %}
-                    <p>You have already submitted your review for this business</p>
+                        {% comment %} {% if request.user.profile.id in business.reviewers %}
+                        <p>You have already submitted your review for this business</p> {% endcomment %}
+                        {% if can_review %}
+                            {% if request.user.profile == business.owner %}
+                            <p>You cannot review your own work</p>
 
-                    {% elif request.user.profile == business.owner %}
-                    <p>You cannot review your own work</p>
-
-                    {% elif request.user.is_authenticated %}
-                    <form class="form" action="{% url 'business' business.id %}" method="POST">
-                        {% csrf_token %}
-                        {% for field in form %}
-                        <div class="form__field">
-                            <label for="formInput#textarea">{{field.label}}</label>
-                            {{field}}
-                        </div>
-                        {% endfor %}
-                        <input class="btn btn--sub btn--lg" type="submit" value="Add Review" />
-                    </form>
-                    {% else %}
-                    <a href="{% url 'login' %}?next={{request.path}}">Please login to leave a review</a>
-                    {% endif %}
-
-                    <div class="commentList">
-                        {% for review in business.review_set.all %}
-                        {% if review.review_message %}
-                        <div class="comment">
-                            <a href="{% url 'user-profile' review.owner.id  %}">
-                                <img class="avatar avatar--md" src="{{review.owner.profile_image.url}}" alt="user" />
-                            </a>
-
-
-                            <div class="comment__details">
-                                <div>
-                                <a href="{% url 'user-profile' review.owner.id  %}"
-                                    class="comment__author">{{review.owner.first_name}} {{review.owner.last_name}}</a>
-                                    {% if review.review_rating == "up" %}
-                                        <span><img style="margin-left:5px; height:12px; width:auto;" src="{% static 'images/heart.png' %}"</span>
-                                    {% else %}
-                                        <span><img style="margin-left:5px; height:15px; width:auto;"  src="{% static 'images/delete.png' %}"</span>
-                                    {% endif %}
-                                </div
-                                <p class="comment__info">{{review.review_message|linebreaksbr}}</p>
-                            </div>
-
-                        </div>
+                            {% elif request.user.is_authenticated %}
+                            <form class="form" action="{% url 'single-business' business.id %}" method="POST">
+                                {% csrf_token %}
+                                {% for field in form %}
+                                <div class="form__field">
+                                    <label for="formInput#textarea">{{field.label}}</label>
+                                    {{field}}
+                                </div>
+                                {% endfor %}
+                                <input class="btn btn--sub btn--lg" type="submit" value="Add Review" />
+                            </form>
+                            {% else %}
+                            <a href="{% url 'login' %}?next={{request.path}}">Please login to leave a review</a>
+                            {% endif %}
                         {% endif %}
-                        {% endfor %}
- 
-                    </div>
+                        <div class="commentList">
+                            {% for review in business.review_set.all %}
+                                {% if review.review_message %}
+                                    <div class="comment">
+                                        <a href="{% url 'user-profile' review.owner.id  %}">
+                                            <img class="avatar avatar--md" src="{{review.owner.profile_image.url}}" alt="user" />
+                                        </a>
+
+
+                                        <div class="comment__details">
+                                            <div>
+                                            <a href="{% url 'user-profile' review.owner.id  %}"
+                                                class="comment__author">{{review.owner.first_name}} {{review.owner.last_name}}</a>
+                                                {% if review.review_rating == "up" %}
+                                                    <span><img style="margin-left:5px; height:12px; width:auto;" src="{% static 'images/heart.png' %}"</span>
+                                                {% else %}
+                                                    <span><img style="margin-left:5px; height:15px; width:auto;"  src="{% static 'images/delete.png' %}"</span>
+                                                {% endif %}
+                                            </div
+                                            <p class="comment__info">{{review.review_message|linebreaksbr}}</p>
+                                        </div>
+
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <h6>Business has no reviews. Leave a review</h6>
+                        {% if can_review %}
+                            {% if request.user.profile == business.owner %}
+                            <p>You cannot review your own work</p>
+
+                            {% elif request.user.is_authenticated %}
+                            <form class="form" action="{% url 'single-business' business.id %}" method="POST">
+                                {% csrf_token %}
+                                {% for field in form %}
+                                <div class="form__field">
+                                    <label for="formInput#textarea">{{field.label}}</label>
+                                    {{field}}
+                                </div>
+                                {% endfor %}
+                                <input class="btn btn--sub btn--lg" type="submit" value="Add Review" />
+                            </form>
+                            {% else %}
+                            <a href="{% url 'login' %}?next={{request.path}}">Please login to leave a review</a>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
                 </div>
             </div>
 

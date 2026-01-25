@@ -20,7 +20,8 @@ def account(request):
 @login_required(login_url="login")
 def user_profile(request, pk):
     profile = Profile.objects.get(id=pk)
-    context = {'profile':profile}
+    businesses = profile.business_set.all()
+    context = {'profile':profile, 'businesses':businesses}
     return render(request, "users/account.html", context)
 
 def login_user(request):
