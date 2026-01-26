@@ -7,5 +7,5 @@ urlpatterns = [
     path('create_business', views.create_business, name="create-business"),
     path('update_business/<str:pk>/', views.update_business, name="update-business"),
     path('delete_business/<str:pk>/', views.delete_business, name="delete-business"),
-    path('inbox', views.inbox, name="inbox"),
+    path('notifications', views.notifications, name="notifications"),
 ]

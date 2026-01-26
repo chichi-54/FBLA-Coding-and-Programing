@@ -151,6 +151,6 @@ def delete_business(request, pk):
 
 
 @login_required(login_url="login")
-def inbox(request):
+def notifications(request):
     context = {}
     return render(request, "business/inbox.html", context)
