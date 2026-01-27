@@ -17,7 +17,7 @@
             <ul class="header__menu">
                 <li class="header__menuItem"><a href="{% url 'businesses' %}">Businesses</a></li>
                 <li class="header__menuItem"><a href="{% url 'all-users' %}">Users</a></li>
-                <li class="header__menuItem"><a href="{% url 'businesses' %}">Applicaitons</a></li>
+                <li class="header__menuItem"><a href="{% url 'applications' %}">Applicaitons</a></li>
                 {% if request.user.is_authenticated %}
                 <li class="header__menuItem"><a href="{% url 'notifications' %}">Notifications</a></li>
                 <li class="header__menuItem"><a href="{% url 'account' %}">Account</a></li>

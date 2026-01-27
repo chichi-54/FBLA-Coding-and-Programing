@@ -9,9 +9,16 @@
       <div class="column column--1of3">
         <div class="card text-center">
           <div class="card__body dev">
-            {% if user.id == profile.user.id%}
+            {% if user.id == profile.user.id %}
                 <a class="tag tag--pill tag--main settings__btn" href="{% url 'edit-account' %}"><i class="im im-edit"></i>
                 Edit</a>
+              {% endif %}
+              {% if user.profile.is_admin == True and profile.is_admin == False %}
+                <a class="tag tag--pill tag--main settings__btn" href="{% url 'make-admin' profile.id %}?next={{ request.get_full_path|urlencode }}"><i class="im im-edit"></i>
+                Make Admin</a>
+              {% elif user.is_superuser %}
+                <a class="tag tag--pill tag--main settings__btn" href="{% url 'remove-admin' profile.id %}?next={{ request.get_full_path|urlencode }}"><i class="im im-edit"></i>
+                  Remove Admin</a>
               {% endif %}
             <img class="avatar avatar--xl dev__avatar" src="{{profile.imageURL}}" />
             <h2 class="dev__name">{{profile.first_name}} {{profile.last_name}}</h2>
