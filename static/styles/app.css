@@ -20,8 +20,8 @@ img {
 }
 
 .content-box {
-  width: 95%;
-  max-width: 85rem;
+  width: 955;
+  max-width: 85vw;
   margin: 0 auto;
 }
 
@@ -691,7 +691,7 @@ img {
 }
 
 .settings__tableInfo{
-  width: 100%;
+  width: 60%;
 }
 
 .settings__tableInfo h4,
@@ -938,3 +938,5 @@ img {
 
   z-index: 99999;
 }
+
+

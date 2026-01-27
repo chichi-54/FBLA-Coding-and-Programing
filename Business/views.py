@@ -12,8 +12,14 @@ from datetime import timedelta
 @login_required(login_url="login")
 def home(request):
     businesses , search_query = search_businesses(request)
+    categories = Category.objects.all()
+    category_id = request.GET.get("category")
+
+    if category_id:
+        businesses = businesses.filter(categories__id=category_id)
+
     custom_range, businesses = paginate_businesses(request, businesses, 6)
-    context = {'businesses':businesses, 'search_query':search_query, 'custom_range':custom_range}
+    context = {'businesses':businesses, 'search_query':search_query, 'custom_range':custom_range, 'categories':categories}
     return render(request, "business/home.html", context)
 
 

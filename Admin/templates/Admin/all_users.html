@@ -7,17 +7,21 @@
     <section class="hero-section text-center">
         <div class="container container--narrow">
             <div class="hero-section__box">
-                <h2>CONNECT WITH <span>DEVELOPERS</span></h2>
-                <h2>FROM AROUND THE WORLD</h2>
+                <h2><span>All Users</span></h2>
             </div>
 
             <div class="hero-section__search">
 
                 <form id="searchForm" class="form" action="{% url 'all-users' %}" method="get">
                     <div class="form__field">
-                        <label for="formInput#search">Search Developers </label>
+                        <label for="formInput#search">Search Users </label>
                         <input class="input input--text" id="formInput#search" type="text" name="search_query"
-                            value="{{search_query}}" placeholder="Search by developer name" />
+                            value="{{search_query}}" placeholder="Search by username" />
+                            <select style="margin-left:10px; padding:14px; border-radius:5px; border:none" name="role">
+                                <option value="">All</option>
+                                <option value="admin">Admins</option>
+                                <option value="user">Users</option>
+                              </select>
                     </div>
 
                     <input class="btn btn--sub btn--lg" type="submit" value="Search" />
@@ -40,6 +44,9 @@
                                 <div class="dev__meta">
                                     <h3>{{profile.first_name}} {{profile.last_name}}</h3>
                                     <h5>{{profile.username|slice:"60"}}</h5>
+                                    {% if profile.is_admin %}
+                                        <small>Admin</small>
+                                    {% endif %}
                                 </div>
                             </div>
                             <p class="dev__info">{{profile.bio|slice:"150"}}</p>

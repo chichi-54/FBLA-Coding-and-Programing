@@ -15,7 +15,13 @@
                     <div class="form__field">
                         <label for="formInput#search">Search By businesses </label>
                         <input class="input input--text" id="formInput#search" type="text" name="search_query"
-                            placeholder="Search by business Title" value="{{search_query}}" />
+                            placeholder="Search by business name" value="{{search_query}}" />
+                            <select style="margin-left:10px; padding:14px; border-radius:5px; border:none" name="category">
+                                <option value="">All</option>
+                                {% for category in categories %}
+                                    <option value="{{category.id}}">{{category.name}}</option>
+                                {% endfor %}
+                              </select>
                     </div>
 
                     <input class="btn btn--sub btn--lg" type="submit" value="Search" />

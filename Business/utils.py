@@ -32,8 +32,8 @@ def paginate_businesses(request, businesses, results):
 
 
 def search_businesses(request):
-
     search_query = ''
+    role = request.GET.get('role')
 
     if request.GET.get('search_query'):
         search_query = request.GET.get('search_query')
@@ -51,4 +51,10 @@ def search_businesses(request):
         Q(address__street_address__icontains=search_query) |
         Q(address__zip_code__icontains=search_query)
     ).distinct()
+
+    # if role == "admin":
+    #     profiles = profiles.filter(is_admin=True)
+    # elif role == "user":
+    #     profiles = profiles.filter(is_admin=False)
+
     return businesses, search_query

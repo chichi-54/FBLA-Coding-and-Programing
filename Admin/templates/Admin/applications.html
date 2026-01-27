@@ -1,5 +1,83 @@
 {% extends "admin_main.html" %}
 {% load static %}
 {% block content %}
+<main class="businesses">
+    <sections class="hero-section text-center">
+        <div class="container container--narrow">
+            <div class="hero-section__box">
+                <h2><span>Business Applciations</span></h2>
+            </div>
 
+            <div class="hero-section__search">
+
+                <form id="searchForm" class="form" action="{% url 'all-users' %}" method="get">
+                    <div class="form__field">
+                        <label for="formInput#search">Search Users </label>
+                        <input class="input input--text" id="formInput#search" type="text" name="search_query"
+                            value="{{search_query}}" placeholder="Search by username" />
+                            <select style="margin-left:10px; padding:14px; border-radius:5px; border:none" name="role">
+                                <option value="">All</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Approved">Approved</option>
+                                <option value="Declined">Declined</option>
+                            </select>
+                    </div>
+
+                    <input class="btn btn--sub btn--lg" type="submit" value="Search" />
+                </form>
+
+            </div>
+        </div>
+
+    </sections>
+    <div class="content-box">
+        {% if pendingCount > 0 %}
+        <div class="content-box">
+            <h3 style="margin-top:20px;" class="inbox__title">Pending Applications(<span>{{pendingCount}}</span>)</h3>
+
+        {% comment %} <div style="width:80vw; margin:0; align-items:center; justify-content:center"> {% endcomment %}
+            <table class="settings__table">
+                {% for business in businesses %}
+                <tr>
+                <td class="settings__thumbnail">
+                    <a href="{% url 'single-business' business.id %}"><img src="{{business.imageURL}}" alt="business Thumbnail" /></a>
+                </td>
+                <td class="settings__tableInfo">
+                    <a href="{% url 'single-business' business.id %}">{{business.name}}</a>
+                    <br>
+                    <p><small style="font-weight:bold">Business Categories: </small>{% for category in business.categories.all %}
+                        <small>{{category}}, </small>
+                    {% endfor %}
+                    </p>
+                    <p><small style="font-weight:bold">Business Owner: </small><a href="{% url 'single-business' business.id %}">{{business.owner.first_name}} {{business.owner.last_name}}</a></p>
+                    <p><small style="font-weight:bold">Address: </small>{{business.address.full_address}}</p>
+                    <p><small style="font-weight:bold">Business Description: </small>{{business.description}}</p>
+                </td>
+
+                {% if request.user.profile.is_admin %}
+                <td class="settings__tableActions">
+                    <a class="tag tag--pill tag--primary settings__btn" style="color:white; align-items:center; padding-left:10px" href="{% url 'approve-business' business.id %}?next={{ request.get_full_path|urlencode }}"><i
+                        class="im im-edit"></i> Approve</a>
+                    <a class="tag tag--pill tag--danger settings__btn" style="background-color:red;color:white; padding-left:10px"
+                    href="{% url 'decline-business'  business.id %}?next={{ request.get_full_path|urlencode }}"><i class="im im-x-mark-circle-o"></i>
+                    Decline</a>
+                </td>
+                {% else %}
+                <td class="settings__tableActions">
+                    <a class="tag tag--pill tag--main settings__btn"
+                        href="{% url 'single-business'  business.id %}?next=/account"><i class="im im-x-mark-circle-o"></i>
+                        View</a>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+    
+            </table>
+            {% else %}
+            <h3 class="inbox__title">There are no pending applications(<span>{{pendingCount}}</span>)</h3>
+            {% endif %}
+    </div>
+
+</main>
 {% endblock %}
+
