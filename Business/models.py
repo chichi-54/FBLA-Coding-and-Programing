@@ -13,7 +13,7 @@ class Business(models.Model):
         ("Pending", "Pending"),
         ("Declined", "Declinedz")
     )
-    approval_state = models.CharField(max_length=10, choices=OPTIONS, null=True, blank=True)
+    approval_state = models.CharField(max_length=10, choices=OPTIONS, null=True, blank=True, default="Pending")
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     categories = models.ManyToManyField("Category", blank=True)

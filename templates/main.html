@@ -21,7 +21,11 @@
 </head>
 
 <body>
-    {% include 'main_navbar.html' %}
+    {% if request.user.profile.is_admin %}
+        {% include 'admin_navbar.html' %}
+    {% else %}
+        {% include 'main_navbar.html' %}
+    {% endif %}
 
 
     <!-- {% if messages %}
