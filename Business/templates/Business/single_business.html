@@ -102,8 +102,12 @@
             <div class="column column--1of3">
                 <h4>Business Owner</h4>
                 <a href="{% url 'user-profile' business.owner.id %}"
-                class="singleBusiness__developer">Owner: {{business.owner.first_name}}
-                </a>
+                class="singleBusiness__developer">Owner: {{business.owner.first_name}}</a>
+                <br>
+                {% if request.user.profile.id == business.owner.id %}
+                <a href="{% url 'update-business' business.id %}"
+                 class="tag tag--pill tag--main settings__btn">Edit Business</a>
+                {% endif %}
                 <br><br>
                 <h4>Contact Us</h4>
                 {% if business.phone_number %}
