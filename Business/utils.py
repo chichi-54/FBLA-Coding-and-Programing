@@ -31,7 +31,7 @@ def paginate_businesses(request, businesses, results):
     return custom_range, businesses
 
 
-def search_businesses(request):
+def search_businesses(request, approval_state=None):
     search_query = ''
     role = request.GET.get('role')
 
@@ -51,6 +51,9 @@ def search_businesses(request):
         Q(address__street_address__icontains=search_query) |
         Q(address__zip_code__icontains=search_query)
     ).distinct()
+
+    if approval_state in ["Pending", "Approved", "Declined"]:
+        businesses = businesses.filter(approval_state=approval_state)
 
     # if role == "admin":
     #     profiles = profiles.filter(is_admin=True)

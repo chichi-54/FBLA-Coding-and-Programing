@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseForbidden
 from django.contrib import messages
 from django.urls import reverse
-from Business.models import Business
+from Business.models import Business, Category
 from django.contrib.auth.models import User
 from .utils import search_profiles, paginate_profiles
 from Business.utils import search_businesses, paginate_businesses
@@ -21,12 +21,67 @@ def all_users(request):
 
 
 @login_required(login_url="login")
-def applications(request):
-    businesses = Business.objects.filter(approval_state="Pending")
+def all_applications(request):
+    page = ""
+    # businesses = Business.objects.all()
+    businesses , search_query = search_businesses(request)
     pendingCount = businesses.count()
-    context = {'businesses':businesses, 'pendingCount':pendingCount}
+    categories = Category.objects.all()
+    category_id = request.GET.get("category")
+
+    if category_id:
+        businesses = businesses.filter(categories__id=category_id)
+
+    context = {'businesses':businesses,'pendingCount':pendingCount, 'page':page, 'search_query':search_query, 'categories':categories}
     return render(request, 'admin/applications.html', context)
 
+
+@login_required(login_url="login")
+def pending_applications(request):
+    page = "PENDING"
+    businesses , search_query = search_businesses(request, approval_state="Pending")
+    businesses = businesses.filter(approval_state="Pending")
+    pendingCount = businesses.count()
+    categories = Category.objects.all()
+    category_id = request.GET.get("category")
+
+    if category_id:
+        businesses = businesses.filter(categories__id=category_id)
+
+    context = {'businesses':businesses,'pendingCount':pendingCount, 'page':page, 'search_query':search_query, 'categories':categories}
+    return render(request, 'admin/applications.html', context)
+
+
+@login_required(login_url="login")
+def approved_applications(request):
+    page = "APPROVED"
+    businesses , search_query = search_businesses(request)
+    businesses = businesses.filter(approval_state="Approved")
+    pendingCount = businesses.count()
+    categories = Category.objects.all()
+    category_id = request.GET.get("category")
+
+    if category_id:
+        businesses = businesses.filter(categories__id=category_id)
+
+    context = {'businesses':businesses,'pendingCount':pendingCount, 'page':page, 'search_query':search_query, 'categories':categories}
+    return render(request, 'admin/applications.html', context)
+
+
+@login_required(login_url="login")
+def declined_applications(request):
+    page = "DECLINED"
+    businesses , search_query = search_businesses(request)
+    businesses = businesses.filter(approval_state="Declined")
+    pendingCount = businesses.count()
+    categories = Category.objects.all()
+    category_id = request.GET.get("category")
+
+    if category_id:
+        businesses = businesses.filter(categories__id=category_id)
+
+    context = {'businesses':businesses,'pendingCount':pendingCount, 'page':page, 'search_query':search_query, 'categories':categories}
+    return render(request, 'admin/applications.html', context)
 
 @login_required(login_url="login")
 def make_admin(request, pk):
