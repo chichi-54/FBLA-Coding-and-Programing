@@ -1,4 +1,19 @@
 {% extends "main.html" %}
 {% block content %}
+<!-- templates/notifications/notifications.html -->
+<h2>Notifications</h2>
+
+{% if notifications %}
+    <ul>
+        {% for notification in notifications %}
+            <li class="{% if not notification.is_read %}unread{% endif %}">
+                {{ notification.message }}
+                <small>{{ notification.created_at|timesince }} ago</small>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No notifications</p>
+{% endif %}
 
 {% endblock %}

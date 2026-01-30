@@ -161,6 +161,15 @@ def notifications(request):
     page = 'notifications'
     profile = request.user.profile
     admin = profile.is_admin = True
+    notifications = request.user.profile.notifications.order_by("-created")
 
-    context = {'page':page, 'profile':profile, 'admin':admin}
-    return render(request, "business/inbox.html", context)
+    context = {'page':page, 'profile':profile, 'admin':admin, 'notifications':notifications}
+    return render(request, "business/notifications.html", context)
+
+
+@login_required
+def mark_notification_read(request, pk):
+    notification = Notification.objects.get(pk=pk, recipient=request.user)
+    notification.is_read = True
+    notification.save()
+    return redirect("notifications")
