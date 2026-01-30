@@ -130,3 +130,20 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
+
+class Notification(models.Model):
+    NOTIFICATION_TYPES = (
+        ('business_application', 'Business Application'),
+        ('review_added', 'Review Added'),
+        ('business_approved', 'Business Approved'),
+        ('business_declined', 'Business Declined'),
+    )
+    recipient = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='notifications')
+    message = models.CharField(max_length=255)
+    notification_type = models.CharField(max_length=50, choices=NOTIFICATION_TYPES)
+    is_read = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+
+    def __str__(self):
+        return f"{self.recipient.first_name} {self.recipient.last_name} - {self.message}"

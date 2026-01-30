@@ -158,5 +158,9 @@ def delete_business(request, pk):
 
 @login_required(login_url="login")
 def notifications(request):
-    context = {}
+    page = 'notifications'
+    profile = request.user.profile
+    admin = profile.is_admin = True
+
+    context = {'page':page, 'profile':profile, 'admin':admin}
     return render(request, "business/inbox.html", context)

@@ -186,10 +186,14 @@ img {
 ========================*/
 
 .hero-section {
-  height: 40vh;
+  height: 35vh;
   display: flex;
   align-items: center;
-  background-color: var(--color-sub);
+  background:url("/static/images/Group_114.png") var(--color-sub);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
 }
 
 .hero-section__box {
