@@ -17,7 +17,7 @@ def account(request):
     return render(request, "users/account.html", context)
 
 
-@login_required(login_url="login")
+# @login_required(login_url="login")
 def user_profile(request, pk):
     profile = Profile.objects.get(id=pk)
     businesses = profile.business_set.all()

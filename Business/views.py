@@ -9,7 +9,7 @@ from .models import Business
 from django.utils import timezone
 from datetime import timedelta
 
-@login_required(login_url="login")
+# @login_required(login_url="login")
 def home(request):
     businesses , search_query = search_businesses(request)
     categories = Category.objects.all()
@@ -24,10 +24,14 @@ def home(request):
 
 
 
-@login_required(login_url="login")
+# @login_required(login_url="login")
 def single_business(request, pk):
     business = Business.objects.get(id=pk)
-    user = request.user.profile
+    user = request.user
+    if not user.is_authenticated:
+        context = {'business': business, 'reviews': business.review_set.all().order_by('-created')}
+        return render(request, 'business/single_business.html', context)
+
     form = ReviewForm()
 
     # Check if user can leave a review (4-hour rule)

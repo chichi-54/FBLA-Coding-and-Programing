@@ -41,10 +41,11 @@
 
         <div class="settings">
           <h3 class="settings__title">Businesses</h3>
-          <a class="tag tag--pill tag--main settings__btn tag--lg" href="{% url 'create-business' %}"><i
-              class="im im-plus"></i> Add business</a>
+          {% if request.user.is_authenticated %}
+            <a class="tag tag--pill tag--main settings__btn tag--lg" href="{% url 'create-business' %}"><i
+                class="im im-plus"></i> Add business</a>
+          {% endif %}
         </div>
-
         <table class="settings__table">
           {% for business in businesses %}
           <tr>
