@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from .models import Business, Notification, Review
 from Users.models import Profile
@@ -6,18 +6,20 @@ from django.contrib.auth.models import User
 
 @receiver(post_save, sender=Business)
 def notify_business_created(sender, instance, created, **kwargs):
-    if created:
-        admins = Profile.objects.filter(is_admin=True)
+    if not created:
+        return
 
-        for admin in admins:
-            Notification.objects.create(
-                recipient=admin,
-                message=f"New business '{instance.name}' was created",
-                notification_type="business_created"
-            )
+    admins = Profile.objects.filter(is_admin=True)
+
+    for admin in admins:
+        Notification.objects.create(
+            recipient=admin,
+            message=f"New business '{instance.name}' was created",
+            notification_type="business_created"
+        )
 
     
-@receiver(post_save, sender=Business)
+@receiver(post_delete, sender=Business)
 def notify_business_deleted(sender, instance, **kwargs):
     admins = Profile.objects.filter(is_admin=True)
 

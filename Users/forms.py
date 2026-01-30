@@ -7,9 +7,9 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email', 'username', 'password1', 'password2']
-        labels = {
-            'first_name': 'Name',
-        }
+        # labels = {
+        #     'first_name': 'Name',
+        # }
 
     def __init__(self, *args, **kwargs):
         super(CustomUserCreationForm, self).__init__(*args, **kwargs)

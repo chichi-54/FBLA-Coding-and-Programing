@@ -14,11 +14,16 @@
                         {{ notification.message }}
                     <small>{{ notification.created|timesince }} ago</small>
                     </a>
-                {% else %}
+                {% elif notification.notification_type == "review_added" %}
                     <a>
                         {{ notification.message }}
                     <small>{{ notification.created|timesince }} ago</small>
                     </a>
+                {% else %}
+                <a>
+                    {{ notification.message }}
+                    <small>{{ notification.created|timesince }} ago</small>
+                </a>
                 {% endif %}
             {% comment %} <span class="message__author">{{notification.created_at}}</span>
             <span class="message__subject">{{notification.is_read}}</span> {% endcomment %}

@@ -38,7 +38,7 @@ def registerUser(request):
             messages.success(request, 'User account was created!')
 
             login(request, user)
-            return redirect('edit-account')
+            return redirect('account')
 
         else:
             messages.success(

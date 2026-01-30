@@ -36,13 +36,13 @@ def single_business(request, pk):
 
     # Check if user can leave a review (4-hour rule)
     four_hours_ago = timezone.now() - timedelta(hours=5)
-    can_review = not business.review_set.filter(owner=user, created__gte=four_hours_ago).exists()
+    can_review = not business.review_set.filter(owner=user.profile, created__gte=four_hours_ago).exists()
 
     if request.method == 'POST' and can_review:
         form = ReviewForm(request.POST)
         if form.is_valid():
             review = form.save(commit=False)
-            review.owner = user
+            review.owner = user.profile
             review.business = business
             review.save()
 
