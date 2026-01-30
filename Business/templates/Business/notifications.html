@@ -1,19 +1,32 @@
-{% extends "main.html" %}
+{% extends 'main.html' %}
+
 {% block content %}
-<!-- templates/notifications/notifications.html -->
-<h2>Notifications</h2>
-
-{% if notifications %}
-    <ul>
-        {% for notification in notifications %}
-            <li class="{% if not notification.is_read %}unread{% endif %}">
-                {{ notification.message }}
-                <small>{{ notification.created_at|timesince }} ago</small>
-            </li>
+<!-- Main Section -->
+<main class="inbox my-xl">
+  <div class="content-box">
+    <h3 class="inbox__title">New Notifications(<span>{{notifications.count}}</span>)</h3>
+    {% if notifications %}
+        <ul class="messages">
+            {% for notification in notifications %}
+            <li class="unread" style="padding:15px 0px; ">
+                {% if notification.notification_type == "business_created" %}
+                    <a href="{% url 'pending-applications' %}">
+                        {{ notification.message }}
+                    <small>{{ notification.created|timesince }} ago</small>
+                    </a>
+                {% else %}
+                    <a>
+                        {{ notification.message }}
+                    <small>{{ notification.created|timesince }} ago</small>
+                    </a>
+                {% endif %}
+            {% comment %} <span class="message__author">{{notification.created_at}}</span>
+            <span class="message__subject">{{notification.is_read}}</span> {% endcomment %}
+        </li>
         {% endfor %}
-    </ul>
-{% else %}
-    <p>No notifications</p>
-{% endif %}
+        </ul>
+    {% endif %}
+  </div>
+</main>
 
-{% endblock %}
+{% endblock content %}

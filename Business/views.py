@@ -156,8 +156,15 @@ def update_business(request, pk):
 
 @login_required(login_url="login")
 def delete_business(request, pk):
-    context = {}
-    return render(request, "business/business_form.html", context)
+    profile = request.user.profile
+    business = profile.business_set.get(id=pk)
+    context = {'business': business, 'profile': profile}
+
+    if request.method == 'POST':
+        business.delete()
+        return redirect('account')
+    
+    return render(request, "business/delete.html", context)
 
 
 @login_required(login_url="login")
