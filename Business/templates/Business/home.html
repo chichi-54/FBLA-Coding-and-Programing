@@ -49,7 +49,7 @@
                                     </p>
                                     <div class="business__categories">
                                         <br><p style="margin-bottom:5px">Category</p>
-                                        {% for category in business.categories.all %}
+                                        {% for category in business.categories.all|slice:":3" %}
                                         <span class="tag tag--pill tag--main">
                                             <small>{{category}}</small>
                                         </span>
